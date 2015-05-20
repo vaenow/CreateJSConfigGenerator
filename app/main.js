@@ -4,7 +4,8 @@
 define(function (require, exports, module) {
 
     var createjs = window.createjs || {},
-        SPRITE_LABELS = require('./SpriteLabels'),
+        SPRITE_LABELS = require('./components/SpriteLabels'),
+        utils = require("./components/Utils"),
         fairy = {
             eye: null,
             body: null,
@@ -12,7 +13,11 @@ define(function (require, exports, module) {
         },
         stage, queue, fairyData, spriteSheet;
 
+    var allSprites = [];
+    var game = window.game || {};
+
     stage = new createjs.Stage("stage");
+    stage.enableMouseOver(24); // 24 updates per second
     createjs.Ticker.timingMode = createjs.Ticker.RAF;
     createjs.Ticker.setFPS(24);
     createjs.Ticker.addEventListener("tick", tick);
@@ -34,6 +39,20 @@ define(function (require, exports, module) {
         fairy.mouth = new createjs.Sprite(spriteSheet, SPRITE_LABELS.MOUTH_STATIC);
 
         stage.addChild(fairy.body, fairy.eye, fairy.mouth);
+
+        allSprites.push(fairy.body);
+        allSprites.push(fairy.eye);
+        allSprites.push(fairy.mouth);
+
+        setListeners();
+    }
+
+    function setListeners() {
+        _.each(allSprites, function(v, k){
+            utils.initDrag(v);
+            utils.initMouseOverChoose.call(this, v);
+        }, this);
+
     }
 
     function tick() {
