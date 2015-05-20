@@ -122,18 +122,16 @@ define(function (require, exports, modules) {
     utils.initMouseOverChoose = function (o) {
         o.on("mouseover", handleMouseOver, this);
         o.on("mouseout", handleMouseOut, this);
-        o.on("pressmove", handlePressMove, this);
+        o.on("pressmove", handleMouseOver, this);
+        o.on("rollover", handleMouseOver, this);
         function handleMouseOver(evt) {
+            if (game.d && game.d.g)
+                game.d.g.clear();
             utils.debugDrawArea.call(this, evt.target, true);
         }
 
         function handleMouseOut() {
             game.d.g.clear();
-        }
-
-        function handlePressMove(evt) {
-            game.d.g.clear();
-            handleMouseOver(evt);
         }
     };
 
@@ -192,8 +190,8 @@ define(function (require, exports, modules) {
         var p = {};
         p.x = s.localToGlobal(0, 0).x;
         p.y = s.localToGlobal(0, 0).y;
-        p.w = s.getBounds().width;
-         p.h = s.getBounds().height;
+        p.w = utils.getSpriteMaxBounds(s).width;
+        p.h = utils.getSpriteMaxBounds(s).height;
         /*p.w = s.getTransformedBounds().width;
          p.h = s.getTransformedBounds().height;*/
         if (!game.d) {
@@ -208,6 +206,25 @@ define(function (require, exports, modules) {
             game.d.g.clear();
             utils.debugDrawArea.call(this, name);
         }, this);
+    };
+
+
+    utils.getSpriteMaxBounds = function (sprite) {
+        if (sprite.cacheMaxBounds) return sprite.cacheMaxBounds;
+
+        var frames = sprite.spriteSheet._data[sprite.currentAnimation].frames;
+        var maxWidth = 0, maxHeight = 0;
+
+        _.each(frames, function (v) {
+            var rect = sprite.spriteSheet._frames[v].rect;
+            maxWidth = rect.width > maxWidth ? rect.width : maxWidth;
+            maxHeight = rect.height > maxHeight ? rect.height : maxHeight;
+        });
+
+        return sprite.cacheMaxBounds = {
+            width: maxWidth,
+            height: maxHeight
+        };
     };
 
     modules.exports = utils;
