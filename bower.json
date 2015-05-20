@@ -1,0 +1,25 @@
+{
+  "name": "AutoGenerator",
+  "version": "0.0.0",
+  "authors": [
+    "vaenow <luowenbiz@gmail.com>"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "seajs": "~3.0.0",
+    "EaselJS": "~0.8.0",
+    "PreloadJS": "~0.6.0",
+    "SoundJS": "~0.6.0",
+    "TweenJS": "~0.6.0"
+  }
+}
