@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="bower_components/seajs/dist/sea.js"></script>
+
+    <script src="bower_components/EaselJS/lib/easeljs-0.8.0.combined.js"></script>
+    <script src="bower_components/SoundJS/lib/soundjs-0.6.0.combined.js"></script>
+    <script src="bower_components/PreloadJS/lib/preloadjs-0.6.0.combined.js"></script>
+    <script src="bower_components/TweenJS/lib/tweenjs-0.6.0.combined.js"></script>
+</head>
+<body>
+
+
+<canvas id='stage' width="1024" height="768"></canvas>
+
+
+<script>
+    // seajs 的简单配置
+    seajs.config({
+
+        base: ".",
+
+        alias: {
+            "fairy" : "assets/role_main_fairy.json",
+        },
+
+        // 文件编码
+        charset: 'utf-8',
+
+        // 调试模式
+        debug: true
+    });
+
+    // 加载入口模块
+    seajs.use("./app/main");
+</script>
+</body>
+</html>
