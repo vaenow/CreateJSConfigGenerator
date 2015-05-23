@@ -3,7 +3,7 @@
  */
 define(function (require, exports, module) {
     var switcher = require('./bootstrap-switch');
-    
+
     var createjs = window.createjs || {},
         SPRITE_LABELS = require('./components/SpriteLabels'),
         utils = require("./components/Utils"),
