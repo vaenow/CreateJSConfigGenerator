@@ -49,9 +49,12 @@ define(function (require, exports, module) {
 
     function setListeners() {
         _.each(allSprites, function(v, k){
-            utils.initDrag(v);
-            utils.initMouseOverChoose.call(this, v);
+            //utils.initDrag(v);
+            //utils.initMouseOverChoose.call(this, v);
         }, this);
+
+        utils.initDrag(stage);
+        utils.initMouseOverChoose.call(this, stage);
 
     }
 

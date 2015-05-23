@@ -123,7 +123,6 @@ define(function (require, exports, modules) {
         o.on("mouseover", handleMouseOver, this);
         o.on("mouseout", handleMouseOut, this);
         o.on("pressmove", handleMouseOver, this);
-        o.on("rollover", handleMouseOver, this);
         function handleMouseOver(evt) {
             if (game.d && game.d.g)
                 game.d.g.clear();
@@ -142,20 +141,20 @@ define(function (require, exports, modules) {
         o.on("mousedown", handleDrag, this, once || false);
         function handleDrag(evt) {
             var offset = {
-                x: evt.currentTarget.x - evt.stageX,
-                y: evt.currentTarget.y - evt.stageY
+                x: evt.target.x - evt.stageX,
+                y: evt.target.y - evt.stageY
             };
 
-            evt.currentTarget.on("pressmove", function (ev) {
+            evt.target.on("pressmove", function (ev) {
                 this.x = ev.stageX + offset.x;
                 this.y = ev.stageY + offset.y;
                 //console.log(this.name, " Global: ", this.localToGlobal(0, 0).x, this.localToGlobal(0, 0).y, " Local: ", this.x, this.y);
-            }, evt.currentTarget);
+            }, evt.target);
 
-            evt.currentTarget.on("pressup", function (ev) {
+            evt.target.on("pressup", function (ev) {
                 console.log("drag & move over.");
                 this.dispatchEvent(new createjs.Event("move over", true));
-            }, evt.currentTarget);
+            }, evt.target);
         }
     };
 
@@ -210,6 +209,7 @@ define(function (require, exports, modules) {
 
 
     utils.getSpriteMaxBounds = function (sprite) {
+        if (!(sprite instanceof createjs.Sprite)) return {width: 0, height: 0};
         if (sprite.cacheMaxBounds) return sprite.cacheMaxBounds;
 
         var frames = sprite.spriteSheet._data[sprite.currentAnimation].frames;
@@ -221,10 +221,7 @@ define(function (require, exports, modules) {
             maxHeight = rect.height > maxHeight ? rect.height : maxHeight;
         });
 
-        return sprite.cacheMaxBounds = {
-            width: maxWidth,
-            height: maxHeight
-        };
+        return sprite.cacheMaxBounds = {width: maxWidth, height: maxHeight};
     };
 
     modules.exports = utils;
