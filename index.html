@@ -13,8 +13,9 @@
 
 <div class="container">
     <div class="col-xs-12">
-        <input class="btn btn-default disabled" type="button" value="组" style="margin: 5px 0"/>
-        <input type="checkbox" name="my-checkbox" id="my-checkbox" checked>
+        <div class="switch" style="margin: 5px 0">
+            <input type="checkbox" name="my-checkbox" id="my-checkbox" checked  data-label-text="组" data-off-color="warning"/>
+        </div>
     </div>
     <div class="col-xs-12">
         <canvas id='stage' width="1024" height="768"></canvas>
@@ -27,11 +28,12 @@
 <script src="bower_components/SoundJS/lib/soundjs-NEXT.combined.js"></script>
 <script src="bower_components/PreloadJS/lib/preloadjs-NEXT.combined.js"></script>
 <script src="bower_components/TweenJS/lib/tweenjs-NEXT.combined.js"></script>
+
 <script src="bower_components/underscore/underscore-min.js"></script>
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
-<!--<script src="app/bootstrap-switch.js"></script>-->
+<script src="bower_components/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+
 <script src="app/index.js"></script>
 </body>
 </html>

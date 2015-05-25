@@ -2,7 +2,6 @@
  * Created by LUOWEN on 2015-05-19.
  */
 define(function (require, exports, module) {
-    var switcher = require('./bootstrap-switch');
 
     var createjs = window.createjs || {},
         SPRITE_LABELS = require('./components/SpriteLabels'),
@@ -16,6 +15,9 @@ define(function (require, exports, module) {
 
     var allSprites = [];
     var game = window.game || {};
+
+    game.switcher = require('./switcher');
+    game.switcher.bootstrapSwitch();
 
     stage = new createjs.Stage("stage");
     stage.enableMouseOver(24); // 24 updates per second
