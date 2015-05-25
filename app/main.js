@@ -2,22 +2,20 @@
  * Created by LUOWEN on 2015-05-19.
  */
 define(function (require, exports, module) {
+    var switcher = require('./switcher')
+        , SPRITE_LABELS = require('./components/SpriteLabels')
+        , utils = require("./components/Utils");
 
-    var createjs = window.createjs || {},
-        SPRITE_LABELS = require('./components/SpriteLabels'),
-        utils = require("./components/Utils"),
-        fairy = {
-            eye: null,
-            body: null,
-            mouth: null
-        },
-        stage, queue, fairyData, spriteSheet;
+    var createjs = window.createjs || {}
+        , stage, queue, fairyData, spriteSheet;
 
     var allSprites = [];
     var game = window.game || {};
-
-    game.switcher = require('./switcher');
-    game.switcher.bootstrapSwitch();
+    var fairy = {
+        eye: null,
+        body: null,
+        mouth: null
+    };
 
     stage = new createjs.Stage("stage");
     stage.enableMouseOver(24); // 24 updates per second
@@ -51,7 +49,7 @@ define(function (require, exports, module) {
     }
 
     function setListeners() {
-        _.each(allSprites, function(v, k){
+        _.each(allSprites, function (v, k) {
             //utils.initDrag(v);
             //utils.initMouseOverChoose.call(this, v);
         }, this);

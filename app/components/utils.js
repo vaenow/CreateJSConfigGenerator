@@ -2,6 +2,7 @@
  * Created by LUOWEN on 2015-05-20.
  */
 define(function (require, exports, modules) {
+    var switcher = require('../switcher');
 
     var utils = exports;
 
@@ -123,14 +124,20 @@ define(function (require, exports, modules) {
         o.on("mouseover", handleMouseOver, this);
         o.on("mouseout", handleMouseOut, this);
         o.on("pressmove", handleMouseOver, this);
+
         function handleMouseOver(evt) {
             if (game.d && game.d.g)
                 game.d.g.clear();
-            utils.debugDrawArea.call(this, evt.target, true);
+            if (switcher.isGroup()) {
+                //TODO
+            } else {
+                utils.debugDrawArea.call(this, evt.target, true);
+            }
         }
 
         function handleMouseOut() {
-            game.d.g.clear();
+            if (game.d && game.d.g)
+                game.d.g.clear();
         }
     };
 
