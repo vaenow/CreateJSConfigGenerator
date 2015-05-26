@@ -129,15 +129,27 @@ define(function (require, exports, modules) {
             if (game.d && game.d.g)
                 game.d.g.clear();
             if (switcher.isGroup()) {
-                //TODO
+                handleSwitcherGroup(evt);
             } else {
-                utils.debugDrawArea.call(this, evt.target, true);
+                handleSwitcherSingle(evt);
             }
         }
 
         function handleMouseOut() {
             if (game.d && game.d.g)
                 game.d.g.clear();
+        }
+
+        function handleSwitcherGroup(evt) {
+            if (evt.target instanceof createjs.Container) {
+                utils.eachRec(evt.target, utils.debugDrawArea);
+            }
+            //utils.debugDrawArea.call(this, evt.target, true);
+
+        }
+
+        function handleSwitcherSingle(evt) {
+            utils.debugDrawArea.call(this, evt.target, true);
         }
     };
 
@@ -229,6 +241,18 @@ define(function (require, exports, modules) {
         });
 
         return sprite.cacheMaxBounds = {width: maxWidth, height: maxHeight};
+    };
+
+    utils.eachRec = function (container, callback, scope, params) {
+        if (!(container instanceof createjs.Container)) return;
+
+        _.each(container.children, function(v, k){
+            if(v instanceof createjs.Container){
+                arguments.callee.call(this, v, callback, scope, params);
+            }
+            callback && callback.apply(scope, Array.prototype.concat.call(v, params));
+        }, this);
+
     };
 
     modules.exports = utils;

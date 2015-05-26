@@ -9,7 +9,7 @@ define(function (require, exports, module) {
     var createjs = window.createjs || {}
         , stage, queue, fairyData, spriteSheet;
 
-    var allSprites = [];
+    //var allSprites = [];
     var game = window.game || {};
     var fairy = {
         eye: null,
@@ -38,21 +38,23 @@ define(function (require, exports, module) {
         fairy.eye = new createjs.Sprite(spriteSheet, SPRITE_LABELS.EYE_STATIC);
         fairy.body = new createjs.Sprite(spriteSheet, SPRITE_LABELS.FAIRY);
         fairy.mouth = new createjs.Sprite(spriteSheet, SPRITE_LABELS.MOUTH_STATIC);
+        fairy.container = new createjs.Container();
+        fairy.container.addChild(fairy.eye, fairy.mouth);
 
-        stage.addChild(fairy.body, fairy.eye, fairy.mouth);
+        stage.addChild(fairy.body, fairy.container);
 
-        allSprites.push(fairy.body);
+        /*allSprites.push(fairy.body);
         allSprites.push(fairy.eye);
-        allSprites.push(fairy.mouth);
+        allSprites.push(fairy.mouth);*/
 
         setListeners();
     }
 
     function setListeners() {
-        _.each(allSprites, function (v, k) {
+        /*_.each(allSprites, function (v, k) {
             //utils.initDrag(v);
             //utils.initMouseOverChoose.call(this, v);
-        }, this);
+        }, this);*/
 
         utils.initDrag(stage);
         utils.initMouseOverChoose.call(this, stage);
