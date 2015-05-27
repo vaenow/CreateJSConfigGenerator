@@ -31,6 +31,8 @@ define(function (require, exports, module) {
         {id: "myfairy", src: "./assets/role_main_fairy.json"}
     ]);
 
+    game.stage = stage;
+
     function handleComplete() {
         fairyData = queue.getResult('myfairy');
         spriteSheet = new createjs.SpriteSheet(fairyData);

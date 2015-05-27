@@ -111,7 +111,7 @@ define(function (require, exports, modules) {
         return childrenGroup;
     };
 
-    /********** init* ************/
+    /********** init *************/
 
     utils.initClickChoose = function (o, once) {
         o.on("click", handleClickChoose, this, once || false);
@@ -128,6 +128,7 @@ define(function (require, exports, modules) {
         function handleMouseOver(evt) {
             if (game.d && game.d.g)
                 game.d.g.clear();
+
             if (switcher.isGroup()) {
                 handleSwitcherGroup(evt);
             } else {
@@ -135,17 +136,20 @@ define(function (require, exports, modules) {
             }
         }
 
-        function handleMouseOut() {
+        function handleMouseOut(evt) {
             if (game.d && game.d.g)
                 game.d.g.clear();
+
+            /*var parent = evt.target.parent;
+            if (!parent) return;
+            parent.hitArea = null;*/
         }
 
         function handleSwitcherGroup(evt) {
-            if (evt.target instanceof createjs.Container) {
-                utils.eachRec(evt.target, utils.debugDrawArea);
-            }
-            //utils.debugDrawArea.call(this, evt.target, true);
-
+            var parent = evt.target.parent;
+            if (!parent) return;
+            utils.eachRec(parent, utils.debugDrawArea, this, true);
+            //parent.hitArea = evt.target;
         }
 
         function handleSwitcherSingle(evt) {
@@ -177,7 +181,7 @@ define(function (require, exports, modules) {
         }
     };
 
-    /********** is* ************/
+    /********** is *************/
 
     utils.isString = function (s) {
         return typeof(s) === 'string' || s instanceof String;
@@ -245,10 +249,11 @@ define(function (require, exports, modules) {
 
     utils.eachRec = function (container, callback, scope, params) {
         if (!(container instanceof createjs.Container)) return;
+        var callee = arguments.callee;
 
-        _.each(container.children, function(v, k){
-            if(v instanceof createjs.Container){
-                arguments.callee.call(this, v, callback, scope, params);
+        _.each(container.children, function (v, k) {
+            if (v instanceof createjs.Container) {
+                callee.call(this, v, callback, scope, params);
             }
             callback && callback.apply(scope, Array.prototype.concat.call(v, params));
         }, this);
