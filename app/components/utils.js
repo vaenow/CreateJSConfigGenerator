@@ -121,14 +121,24 @@ define(function (require, exports, modules) {
     };
 
     utils.initMouseOverChoose = function (o) {
+        o.on("mousein", handleMouseIn, this);
         o.on("mouseover", handleMouseOver, this);
         o.on("mouseout", handleMouseOut, this);
         o.on("pressmove", handleMouseOver, this);
 
+        function handleMouseOver(evt){
+
+        }
         function handleMouseOver(evt) {
             if (game.d && game.d.g)
                 game.d.g.clear();
 
+            var parent = evt.target.parent;
+            console.log("handleMouseOver parent:%s, tar:%s",parent.name, evt.target.name);
+            if (parent) parent.hitArea = null;
+
+            //console.log("evt.target.name",evt.target.name);
+            //console.log("evt.target.hitArea",evt.target.hitArea && evt.target.hitArea.name);
             if (switcher.isGroup()) {
                 handleSwitcherGroup(evt);
             } else {
@@ -140,16 +150,17 @@ define(function (require, exports, modules) {
             if (game.d && game.d.g)
                 game.d.g.clear();
 
-            /*var parent = evt.target.parent;
-            if (!parent) return;
-            parent.hitArea = null;*/
+            var parent = evt.target.parent;
+            console.log("handleMouseOut parent:%s, tar:%s",parent.name, evt.target.name);
+            if (parent) parent.hitArea = null;
         }
 
         function handleSwitcherGroup(evt) {
             var parent = evt.target.parent;
             if (!parent) return;
             utils.eachRec(parent, utils.debugDrawArea, this, true);
-            //parent.hitArea = evt.target;
+            console.log("handleSwitcherGroup parent:%s, tar:%s",parent.name, evt.target.name);
+            parent.hitArea = evt.target;
         }
 
         function handleSwitcherSingle(evt) {
@@ -163,6 +174,8 @@ define(function (require, exports, modules) {
 
         o.on("mousedown", handleDrag, this, once || false);
         function handleDrag(evt) {
+            if (evt.target instanceof createjs.Shape) return;
+
             var offset = {
                 x: evt.target.x - evt.stageX,
                 y: evt.target.y - evt.stageY
@@ -193,7 +206,6 @@ define(function (require, exports, modules) {
 
 
     /********** debug ************/
-
         // Draw a rectangle shape of objects to debug.
     utils.debugDrawArea = function (name, color, isSync) {
         if (this == utils) throw utils.ERR_SCOPE_NEED_TO_BE_CHANGED;
@@ -210,6 +222,7 @@ define(function (require, exports, modules) {
             s.debugColor = color
         }
         var p = {};
+
         p.x = s.localToGlobal(0, 0).x;
         p.y = s.localToGlobal(0, 0).y;
         p.w = utils.getSpriteMaxBounds(s).width;
@@ -220,7 +233,7 @@ define(function (require, exports, modules) {
             game.d = {};
         }
         if (!game.d.g) {
-            game.d.g = s.parent.addChild(new createjs.Shape()).graphics;
+            game.d.g = game.stage.addChild(new createjs.Shape()).graphics;
         }
         game.d.g.s(s.debugColor || 'red').dr(p.x, p.y, p.w, p.h);
         //        return s;
@@ -229,7 +242,37 @@ define(function (require, exports, modules) {
             utils.debugDrawArea.call(this, name);
         }, this);
     };
+    /**
+     * 利用坐标数组，在游戏中画出点阵图
+     * @param points
+     * @param colorful
+     */
+    utils.debugDrawPoints = function (points, colorful) {
+        if (!utils.isArray(points)) {
+            console.error("points must be Array !");
+            return;
+        }
+        if (points.length % 2 !== 0) {
+            console.error("points' length must be EVEN !");
+            return;
+        }
 
+        game.d = game.d || {};
+        game.d.g = game.d.g || game.stage.addChild(new createjs.Shape()).graphics;
+
+        var debugColor = 'red';
+        colorful = colorful || true;
+        if (colorful) { //随机颜色
+            var colors = ["red", "orange", "yellow", "green", "blue", "purple"];
+            debugColor = colors[utils.getRandomInt(colors.length)];
+        } else if (utils.isString(colorful)) { //自定义颜色
+            debugColor = colorful
+        }
+
+        while (points.length) {
+            game.d.g.s(debugColor).f(debugColor).dc(points.shift(), points.shift(), 4);
+        }
+    };
 
     utils.getSpriteMaxBounds = function (sprite) {
         if (!(sprite instanceof createjs.Sprite)) return {width: 0, height: 0};
@@ -261,5 +304,5 @@ define(function (require, exports, modules) {
     };
 
     modules.exports = utils;
-
+    game.utils = utils;
 });

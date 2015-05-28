@@ -41,25 +41,33 @@ define(function (require, exports, module) {
         fairy.body = new createjs.Sprite(spriteSheet, SPRITE_LABELS.FAIRY);
         fairy.mouth = new createjs.Sprite(spriteSheet, SPRITE_LABELS.MOUTH_STATIC);
         fairy.container = new createjs.Container();
-        fairy.container.addChild(fairy.eye, fairy.mouth);
+        fairy.faceContainer = new createjs.Container();
 
-        stage.addChild(fairy.body, fairy.container);
+        stage.addChild(fairy.container)
+            .addChild(fairy.body, fairy.faceContainer)
+            .addChild(fairy.eye, fairy.mouth);
+
+        fairy.eye.name = "eye";
+        fairy.mouth.name = "mouth";
+        fairy.body.name = "body";
+        fairy.faceContainer.name = "faceContainer";
+        fairy.container.name = "container";
 
         /*allSprites.push(fairy.body);
-        allSprites.push(fairy.eye);
-        allSprites.push(fairy.mouth);*/
+         allSprites.push(fairy.eye);
+         allSprites.push(fairy.mouth);*/
 
         setListeners();
     }
 
     function setListeners() {
         /*_.each(allSprites, function (v, k) {
-            //utils.initDrag(v);
-            //utils.initMouseOverChoose.call(this, v);
-        }, this);*/
+         //utils.initDrag(v);
+         //utils.initMouseOverChoose.call(this, v);
+         }, this);*/
 
-        utils.initDrag(stage);
-        utils.initMouseOverChoose.call(this, stage);
+        utils.initDrag(fairy.container);
+        utils.initMouseOverChoose.call(this, fairy.container);
 
     }
 
