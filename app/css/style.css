@@ -3,6 +3,6 @@ body {
     background: rgb(176, 216, 230) !important;
 }
 canvas {
-    //width: 100%;
+    width: 100%;
     background: url("../img/transparent.png");
 }
