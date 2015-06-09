@@ -67,7 +67,7 @@ define(function (require, exports, module) {
          }, this);*/
 
         utils.initDrag(fairy.container);
-        utils.initMouseOverChoose.call(this, fairy.container);
+        utils.initMouseOverChoose.call(this, stage);
 
     }
 

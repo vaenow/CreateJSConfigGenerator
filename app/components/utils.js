@@ -112,58 +112,74 @@ define(function (require, exports, modules) {
     };
 
     /********** init *************/
+    utils.initMouseOverChoose = function (stage) {
+        stage.on("stagemousemove", handleStageMouseMove, this);
+        stage.on("stagemousedown", handleStageMouseDown, this);
+        stage.on("stagemouseup", handleStageMouseUp, this);
+
+        function handleStageMouseMove(event) {
+            if (game.d && game.d.g)
+                game.d.g.clear();
+
+            var target = stage.getObjectUnderPoint(event.stageX, event.stageY);
+            if (!target) return;
+
+            if (switcher.isGroup()) {
+                handleSwitcherGroup(target);
+            } else {
+                handleSwitcherSingle(target);
+            }
+            //clearHitArea(null, false);
+        }
+
+        function handleStageMouseDown(event) {
+            if(!switcher.isGroup()) return;
+
+            //clearHitArea(null, false);
+            var obj = stage.getObjectUnderPoint(event.stageX, event.stageY);
+            obj && obj.parent && (obj.parent.hitArea = obj);
+        }
+
+        function handleStageMouseUp(event) {
+            console.log("handleStageMouseUp");
+            clearHitArea();
+        }
+
+        function clearHitArea(target, clear) {
+            target = target || stage;//getTopParent(target);
+            clear = clear === undefined ? true : !!clear;
+
+            var callee = arguments.callee;
+            if (target.children) {
+                _.each(target.children, function (v) {
+                    callee.call(this, v);
+                }, this);
+            }
+
+            clear
+                ? target.hitArea = null
+                : target.hitArea && console.log("show", target.name, '---', target.hitArea && target.hitArea.name)
+        }
+
+        function handleSwitcherGroup(target) {
+            //鼠标mousedown之后，使用hitArea已经把target切换为target.parent
+            //如果target是Container,那么状态为 hover && !mousedown
+            //如果target不是Container,那么状态为 hover && mousedown
+            if (!(target instanceof createjs.Container)) {
+                target = target.parent;
+            }
+
+            utils.eachRec(target, utils.debugDrawArea, this, true);
+        }
+
+        function handleSwitcherSingle(target) {
+            utils.debugDrawArea.call(this, target, true);
+        }
+    };
 
     utils.initClickChoose = function (o, once) {
         o.on("click", handleClickChoose, this, once || false);
         function handleClickChoose(evt) {
-            utils.debugDrawArea.call(this, evt.target, true);
-        }
-    };
-
-    utils.initMouseOverChoose = function (o) {
-        o.on("mousein", handleMouseIn, this);
-        o.on("mouseover", handleMouseOver, this);
-        o.on("mouseout", handleMouseOut, this);
-        o.on("pressmove", handleMouseOver, this);
-
-        function handleMouseOver(evt){
-
-        }
-        function handleMouseOver(evt) {
-            if (game.d && game.d.g)
-                game.d.g.clear();
-
-            var parent = evt.target.parent;
-            console.log("handleMouseOver parent:%s, tar:%s",parent.name, evt.target.name);
-            if (parent) parent.hitArea = null;
-
-            //console.log("evt.target.name",evt.target.name);
-            //console.log("evt.target.hitArea",evt.target.hitArea && evt.target.hitArea.name);
-            if (switcher.isGroup()) {
-                handleSwitcherGroup(evt);
-            } else {
-                handleSwitcherSingle(evt);
-            }
-        }
-
-        function handleMouseOut(evt) {
-            if (game.d && game.d.g)
-                game.d.g.clear();
-
-            var parent = evt.target.parent;
-            console.log("handleMouseOut parent:%s, tar:%s",parent.name, evt.target.name);
-            if (parent) parent.hitArea = null;
-        }
-
-        function handleSwitcherGroup(evt) {
-            var parent = evt.target.parent;
-            if (!parent) return;
-            utils.eachRec(parent, utils.debugDrawArea, this, true);
-            console.log("handleSwitcherGroup parent:%s, tar:%s",parent.name, evt.target.name);
-            parent.hitArea = evt.target;
-        }
-
-        function handleSwitcherSingle(evt) {
             utils.debugDrawArea.call(this, evt.target, true);
         }
     };
@@ -182,13 +198,14 @@ define(function (require, exports, modules) {
             };
 
             evt.target.on("pressmove", function (ev) {
+                ev.stopPropagation();
                 this.x = ev.stageX + offset.x;
                 this.y = ev.stageY + offset.y;
                 //console.log(this.name, " Global: ", this.localToGlobal(0, 0).x, this.localToGlobal(0, 0).y, " Local: ", this.x, this.y);
             }, evt.target);
 
             evt.target.on("pressup", function (ev) {
-                console.log("drag & move over.");
+                console.log("drag & move");
                 this.dispatchEvent(new createjs.Event("move over", true));
             }, evt.target);
         }
