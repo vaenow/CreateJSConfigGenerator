@@ -9,17 +9,28 @@
     <link rel="stylesheet" href="bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css"/>
     <title></title>
 </head>
-<body>
 
-<div class="container">
-    <div class="col-xs-12">
-        <div class="switch" style="margin: 5px 0">
-            <input type="checkbox" name="my-checkbox" id="my-checkbox" checked data-on-text="Group" data-off-text="Single" data-off-color="warning"/>
+<body>
+<div class="container-fluid" style="margin-top: 10px;">
+    <div class="col-xs-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">控制面板</h3>
+            </div>
+            <div class="panel-body">
+                <div class="switch" style="margin: 5px 0">
+                    <label for="my-checkbox">是否分组：</label>
+                    <input type="checkbox" name="my-checkbox" id="my-checkbox" checked data-on-text="Group" data-off-text="Single" data-off-color="warning"/>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-xs-12">
+
+    <div class="col-xs-8">
         <canvas id='stage' width="1024" height="768"></canvas>
     </div>
+    <div class="col-xs-2"></div>
+
 </div>
 
 
