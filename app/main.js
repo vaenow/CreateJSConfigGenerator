@@ -28,7 +28,7 @@ define(function (require, exports, module) {
     queue.on("complete", handleComplete, this);
     //queue.loadFile({id:"sound", src:"http://path/to/sound.mp3"});
     queue.loadManifest([
-        {id: "myfairy", src: "./assets/role_main_fairy.json"}
+        {id: "myfairy", src: "./lib/role_main_fairy.json"}
     ]);
 
     game.stage = stage;

@@ -1,8 +1,8 @@
 {
     "framerate":24,
     "images":[
-        "assets/role_main_fairy_0.png",
-        "assets/role_main_fairy_1.png"
+        "lib/role_main_fairy_0.png",
+        "lib/role_main_fairy_1.png"
     ],
     "frames":[
         [462, 325, 62, 26, 1, 0, 0],

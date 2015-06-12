@@ -5,7 +5,7 @@
 seajs.config({
     base: ".",
     alias: {
-        "fairy": "assets/role_main_fairy.json"
+        "fairy": "lib/role_main_fairy.json"
     },
     // 文件编码
     charset: 'utf-8',
